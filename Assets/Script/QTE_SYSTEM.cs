@@ -8,13 +8,30 @@ public class QTE_SYSTEM : MonoBehaviour
 	public GameObject DisplayBox;
 	public GameObject PassBox;
 	public int QTEGen;
-	public int WaitingForKey;
+	public int WaitingForKey = 1;
 	public int CorrectKey;
 	public int CountingDown;
+	public float Time;
+	public int ForceExit = 0;
+
+	public void LaunchQTE(GameObject Car)
+	{
+		CountingDown = 0;
+		WaitingForKey = 0;
+		ForceExit = 0;
+		CorrectKey = 0;
+	}
+
+	public void ExitQTE(GameObject Car)
+	{
+		PassBox.GetComponent<Text> ().text = "";
+		DisplayBox.GetComponent<Text> ().text = "";
+		ForceExit = 1;
+	}
 
 	void Update()
 	{
-		if (WaitingForKey == 0)
+		if (WaitingForKey == 0 && ForceExit == 0)
 		{
 			QTEGen = Random.Range (1, 4);
 			CountingDown = 1;
@@ -87,27 +104,27 @@ public class QTE_SYSTEM : MonoBehaviour
 	IEnumerator KeyPressing()
 	{
 		QTEGen = 4;
-		if (CorrectKey == 1)
+		if (CorrectKey == 1 && ForceExit == 0)
 		{
 			CountingDown = 2;
 			PassBox.GetComponent<Text> ().text = "PASS!";
-			yield return new WaitForSeconds (3.5f);
+			yield return new WaitForSeconds (Time);
 			CorrectKey = 0;
 			PassBox.GetComponent<Text> ().text = "";
 			DisplayBox.GetComponent<Text> ().text = "";
-			yield return new WaitForSeconds (3.5f);
+			yield return new WaitForSeconds (Time);
 			WaitingForKey = 0;
 			CountingDown = 1;
 		}
-		if (CorrectKey == 2)
+		if (CorrectKey == 2 && ForceExit == 0)
 		{
 			CountingDown = 2;
 			PassBox.GetComponent<Text> ().text = "FAIL!!!!!!!";
-			yield return new WaitForSeconds (3.5f);
+			yield return new WaitForSeconds (Time);
 			CorrectKey = 0;
 			PassBox.GetComponent<Text> ().text = "";
 			DisplayBox.GetComponent<Text> ().text = "";
-			yield return new WaitForSeconds (3.5f);
+			yield return new WaitForSeconds (Time);
 			WaitingForKey = 0;
 			CountingDown = 1;
 		}
@@ -115,17 +132,18 @@ public class QTE_SYSTEM : MonoBehaviour
 
 	IEnumerator CountDown()
 	{
-		yield return new WaitForSeconds(3.5f);
-		if (CountingDown == 1)
+		if (ForceExit == 0)
+			yield return new WaitForSeconds(3.5f);
+		if (CountingDown == 1 && ForceExit == 0)
 		{
 			QTEGen = 4;
 			CountingDown = 2;
 			PassBox.GetComponent<Text> ().text = "FAIL!!!!!!!";
-			yield return new WaitForSeconds (3.5f);
+			yield return new WaitForSeconds (Time);
 			CorrectKey = 0;
 			PassBox.GetComponent<Text> ().text = "";
 			DisplayBox.GetComponent<Text> ().text = "";
-			yield return new WaitForSeconds (3.5f);
+			yield return new WaitForSeconds (Time);
 			WaitingForKey = 0;
 			CountingDown = 1;
 		}
