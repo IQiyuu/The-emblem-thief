@@ -6,6 +6,7 @@ public class ParkingGen : MonoBehaviour
 {
     
     [SerializeField] GameObject[] _carTab;
+    [SerializeField] GameObject _exit;
     [SerializeField] int[] _carNum;
 
     private void right(int i) {
@@ -183,6 +184,25 @@ public class ParkingGen : MonoBehaviour
         }
     }
 
+    private void build_exit(){
+        int r = Random.Range(0, 2);
+        float ry_min = -9.5f, ry_max = 21.2f;
+        float up = 23.8f, down = -12f;
+        double tmp = (Random.value * (ry_max - ry_min)) + ry_min;
+        float ry = (float) tmp;
+
+        GameObject exit;
+        switch (r){
+            case 0: // Up
+                exit = Instantiate(_exit, new Vector3(ry, up, 0), Quaternion.identity);
+                exit.transform.Rotate(0, 0, 180);
+                break ;
+            case 1: // Down
+                exit = Instantiate(_exit, new Vector3(ry, down, 0), Quaternion.identity);
+                break ;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -193,6 +213,7 @@ public class ParkingGen : MonoBehaviour
             thirdCol(i);
             left(i);
         }
+        build_exit();
     }
 
     // Update is called once per frame
