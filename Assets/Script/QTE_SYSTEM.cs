@@ -13,12 +13,12 @@ public class QTE_SYSTEM : MonoBehaviour
 	public int CountingDown;
 	public float Time;
 	public int ForceExit = 0;
+	public int _cooldown = 0;
 
 	public void LaunchQTE(GameObject Car)
 	{
-		CountingDown = 0;
-		WaitingForKey = 0;
 		ForceExit = 0;
+		WaitingForKey = 0;
 		CorrectKey = 0;
 	}
 
@@ -27,12 +27,23 @@ public class QTE_SYSTEM : MonoBehaviour
 		PassBox.GetComponent<Text> ().text = "";
 		DisplayBox.GetComponent<Text> ().text = "";
 		ForceExit = 1;
+		StartCoroutine(Cooldown());
+	}
+
+	IEnumerator Cooldown() {
+		_cooldown = 5;
+		while (_cooldown > 0) {
+			yield return new WaitForSeconds(1);
+			_cooldown--;
+			PassBox.GetComponent<Text> ().text = "Cooldown: " + _cooldown + "s";
+		}
 	}
 
 	void Update()
 	{
-		if (WaitingForKey == 0 && ForceExit == 0)
+		if (WaitingForKey == 0 && ForceExit == 0 && _cooldown == 0)
 		{
+			print(ForceExit);
 			QTEGen = Random.Range (1, 4);
 			CountingDown = 1;
 			StartCoroutine(CountDown ());
@@ -54,7 +65,7 @@ public class QTE_SYSTEM : MonoBehaviour
 		}
 		if (QTEGen == 1)
 		{
-			if (Input.anyKeyDown)
+			if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.D) && !Input.GetKeyDown(KeyCode.Q) && !Input.GetKeyDown(KeyCode.S) && !Input.GetKeyDown(KeyCode.Z))
 			{
 				if (Input.GetButtonDown ("AKey"))
 				{
@@ -70,7 +81,7 @@ public class QTE_SYSTEM : MonoBehaviour
 		}
 		if (QTEGen == 2)
 		{
-			if (Input.anyKeyDown)
+			if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.D) && !Input.GetKeyDown(KeyCode.Q) && !Input.GetKeyDown(KeyCode.S) && !Input.GetKeyDown(KeyCode.Z))
 			{
 				if (Input.GetButtonDown ("TKey"))
 				{
@@ -86,7 +97,7 @@ public class QTE_SYSTEM : MonoBehaviour
 		}
 		if (QTEGen == 3)
 		{
-			if (Input.anyKeyDown)
+			if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.D) && !Input.GetKeyDown(KeyCode.Q) && !Input.GetKeyDown(KeyCode.S) && !Input.GetKeyDown(KeyCode.Z))
 			{
 				if (Input.GetButtonDown ("EKey"))
 				{
@@ -114,7 +125,6 @@ public class QTE_SYSTEM : MonoBehaviour
 			DisplayBox.GetComponent<Text> ().text = "";
 			yield return new WaitForSeconds (Time);
 			WaitingForKey = 0;
-			CountingDown = 1;
 		}
 		if (CorrectKey == 2 && ForceExit == 0)
 		{
@@ -133,7 +143,7 @@ public class QTE_SYSTEM : MonoBehaviour
 	IEnumerator CountDown()
 	{
 		if (ForceExit == 0)
-			yield return new WaitForSeconds(3.5f);
+			yield return new WaitForSeconds(Time * 2);
 		if (CountingDown == 1 && ForceExit == 0)
 		{
 			QTEGen = 4;

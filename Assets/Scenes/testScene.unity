@@ -2133,8 +2133,9 @@ MonoBehaviour:
   WaitingForKey: 1
   CorrectKey: 0
   CountingDown: 0
-  Time: 5
+  Time: 1
   ForceExit: 0
+  _cooldown: 0
 --- !u!1 &1922992255
 GameObject:
   m_ObjectHideFlags: 0
@@ -3225,6 +3226,18 @@ PrefabInstance:
     - target: {fileID: 3945900255607726566, guid: dc1c89f86d5eb914a958b30ea095439f, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5235380514488533448, guid: dc1c89f86d5eb914a958b30ea095439f, type: 3}
+      propertyPath: m_Radius
+      value: 3.2222402
+      objectReference: {fileID: 0}
+    - target: {fileID: 5235380514488533448, guid: dc1c89f86d5eb914a958b30ea095439f, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.05250243
+      objectReference: {fileID: 0}
+    - target: {fileID: 5235380514488533448, guid: dc1c89f86d5eb914a958b30ea095439f, type: 3}
+      propertyPath: m_Offset.y
+      value: 2.9617414
       objectReference: {fileID: 0}
     - target: {fileID: 7067064632613865980, guid: dc1c89f86d5eb914a958b30ea095439f, type: 3}
       propertyPath: m_LocalScale.x
