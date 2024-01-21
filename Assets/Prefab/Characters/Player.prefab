@@ -15,11 +15,7 @@ GameObject:
   - component: {fileID: 1692112112770408835}
   - component: {fileID: -5534457377754172469}
   - component: {fileID: 4502172858183605807}
-<<<<<<< Updated upstream
-  - component: {fileID: 5905146177955032119}
-=======
-  - component: {fileID: 1416544474342558017}
->>>>>>> Stashed changes
+  - component: {fileID: 6336117440736559967}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -190,22 +186,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-<<<<<<< Updated upstream
-  _animator: {fileID: 5905146177955032119}
---- !u!95 &5905146177955032119
+  _animator: {fileID: 6336117440736559967}
+--- !u!95 &6336117440736559967
 Animator:
   serializedVersion: 5
-=======
---- !u!114 &1416544474342558017
-MonoBehaviour:
->>>>>>> Stashed changes
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4455490581118366897}
   m_Enabled: 1
-<<<<<<< Updated upstream
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 00680d96b04462545928f4f2662e81ef, type: 2}
   m_CullingMode: 0
@@ -218,10 +208,3 @@ MonoBehaviour:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
-=======
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e88f61f22c77d6040b2fdde926a51a59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EndMenuUI: {fileID: 0}
->>>>>>> Stashed changes

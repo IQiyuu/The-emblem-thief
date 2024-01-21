@@ -12,13 +12,11 @@ public class PlayerMovement : MonoBehaviour
         float horizontalMovement = Input.GetAxis("Horizontal");
         float verticalMovement = Input.GetAxis("Vertical") ;
         MovePlayer(horizontalMovement, verticalMovement);
-        print(Mathf.Abs(horizontalMovement + verticalMovement));
         _animator.SetFloat("Speed", Mathf.Abs(horizontalMovement) + Mathf.Abs(verticalMovement));
     }
 
     void MovePlayer(float horizontalMovement, float verticalMovement)
     {
-        //transform.position = new Vector3(transform.position.x + horizontalMovement, transform.position.y, 0);
         Vector2 movementDirection = new Vector2(horizontalMovement, verticalMovement);
         float inputMagnitude = Mathf.Clamp01(movementDirection.magnitude);
         movementDirection.Normalize();
