@@ -6,7 +6,7 @@ public class PickUp : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            QTE.LaunchQTE(gameObject);
+            QTE.LaunchQTE(gameObject.transform.parent.GetComponent<Car>());
             //Destroy(gameObject);
         }
     }
@@ -15,7 +15,7 @@ public class PickUp : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            QTE.ExitQTE(gameObject);
+            QTE.ExitQTE(gameObject.GetComponent<Car>());
             //Destroy(gameObject);
         }
     }

@@ -6,15 +6,19 @@ TagManager:
   tags:
   - Car
   - Emblem
+  - CarUI
+  - PlayerUI
+  - Guard
+  - SFX
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Game
-  - 
+  - Cars
   - 
   - 
   - 

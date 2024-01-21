@@ -5,157 +5,215 @@ using UnityEngine.UI;
 
 public class QTE_SYSTEM : MonoBehaviour
 {
-	public GameObject DisplayBox;
-	public GameObject PassBox;
-	public int QTEGen;
-	public int WaitingForKey = 1;
-	public int CorrectKey;
-	public int CountingDown;
-	public float Time;
-	public int ForceExit = 0;
-	public int _cooldown = 0;
+	[SerializeField] Text 		_letterBox;
+	[SerializeField] Text		_msgBox;
+	[SerializeField] Player 	_player;
+	[SerializeField] float 		_time;
+	[SerializeField] AudioSource _soundSource;
+	[SerializeField] AudioClip	_inProgressSound;
+	[SerializeField] AudioClip	_failSound;
+	[SerializeField] AudioClip	_successSound;
 
-	public void LaunchQTE(GameObject Car)
+	private int 	_qteGen = 0;
+	private int 	_correctKey = 0;
+	private int 	_countingDown = 0;
+	private int 	_cooldown = 0;
+	private int 	_keyCounter = 0;
+	private Car 	_actualCar = null;
+	private bool 	_waitingForKey = true;
+	private bool 	_activated = false;
+	private bool 	_forceExit = true;
+
+	public void Start()
 	{
-		ForceExit = 0;
-		WaitingForKey = 0;
-		CorrectKey = 0;
+		_player = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Player>();
+		_letterBox = GameObject.FindGameObjectsWithTag("CarUI")[1].GetComponent<Text>();
+		_msgBox = GameObject.FindGameObjectsWithTag("CarUI")[0].GetComponent<Text>();
 	}
 
-	public void ExitQTE(GameObject Car)
+	IEnumerator sleep(float tts) {
+		_letterBox.text = "";
+		_soundSource.Play();
+		yield return new WaitForSeconds(tts);
+		_activated = true;
+	}
+
+	public void LaunchQTE(Car car)
 	{
-		PassBox.GetComponent<Text> ().text = "";
-		DisplayBox.GetComponent<Text> ().text = "";
-		ForceExit = 1;
-		StartCoroutine(Cooldown());
+		_forceExit = false;
+		_waitingForKey = false;
+		_correctKey = 0;
+		_keyCounter = 0;
+		_actualCar = car;
+		_soundSource.clip = _inProgressSound;
+	}
+
+	public void ExitQTE(Car car)
+	{
+		_msgBox.text = "";
+		_letterBox.text = "";
+		_forceExit = true;
+		_activated = false;
+		if (_cooldown == 0 && _activated)
+			StartCoroutine(Cooldown());
+		_keyCounter = 0;
+		_soundSource.Stop();
 	}
 
 	IEnumerator Cooldown() {
 		_cooldown = 5;
 		while (_cooldown > 0) {
+			if (!_forceExit && _actualCar && !_actualCar.getStole())
+				_msgBox.text = "Cooldown: " + _cooldown + "s";
+			else
+				_msgBox.text = "";
 			yield return new WaitForSeconds(1);
 			_cooldown--;
-			PassBox.GetComponent<Text> ().text = "Cooldown: " + _cooldown + "s";
 		}
 	}
 
 	void Update()
 	{
-		if (WaitingForKey == 0 && ForceExit == 0 && _cooldown == 0)
-		{
-			print(ForceExit);
-			QTEGen = Random.Range (1, 4);
-			CountingDown = 1;
-			StartCoroutine(CountDown ());
-			if (QTEGen == 1)
-			{
-				WaitingForKey = 1;
-				DisplayBox.GetComponent<Text> ().text = "[A]";
+		if (!_activated && !_forceExit) {
+			if (!_actualCar.getStole()) {
+				_letterBox.text = "R to steal";
+				if (Input.GetKeyDown(KeyCode.R))
+					StartCoroutine(sleep(1));
 			}
-			if (QTEGen == 2)
-			{
-				WaitingForKey = 1;
-				DisplayBox.GetComponent<Text> ().text = "[T]";
-			}
-			if (QTEGen == 3)
-			{
-				WaitingForKey = 1;
-				DisplayBox.GetComponent<Text> ().text = "[E]";
-			}
+			else
+				_letterBox.text = "already stolen";
 		}
-		if (QTEGen == 1)
-		{
-			if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.D) && !Input.GetKeyDown(KeyCode.Q) && !Input.GetKeyDown(KeyCode.S) && !Input.GetKeyDown(KeyCode.Z))
-			{
-				if (Input.GetButtonDown ("AKey"))
-				{
-					CorrectKey = 1;
-					StartCoroutine (KeyPressing ());
-				}
+		else if (_activated) {
+			if (_actualCar && !_actualCar.getStole() && _keyCounter == _actualCar.getTimeToSteal()) {
+				if (_actualCar.getPoliceCar())
+					_player.addPolice();
 				else
+					_player.addAmount(_actualCar.getValue());
+				_actualCar.setStole();
+				_soundSource.Stop();
+				//Destroy(gameObject);
+			}
+			if (!_waitingForKey && !_forceExit && _cooldown == 0 
+				&& _actualCar && !_actualCar.getStole() && _keyCounter < _actualCar.getTimeToSteal())
+			{
+				_qteGen = Random.Range (1, 4);
+				_countingDown = 1;
+				StartCoroutine(CountDown ());
+				if (_qteGen == 1)
 				{
-					CorrectKey = 2;
-					StartCoroutine (KeyPressing ());
+					_waitingForKey = true;
+					_letterBox.text = "[A]";
+				}
+				if (_qteGen == 2)
+				{
+					_waitingForKey = true;
+					_letterBox.text = "[T]";
+				}
+				if (_qteGen == 3)
+				{
+					_waitingForKey = true;
+					_letterBox.text = "[E]";
 				}
 			}
-		}
-		if (QTEGen == 2)
-		{
-			if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.D) && !Input.GetKeyDown(KeyCode.Q) && !Input.GetKeyDown(KeyCode.S) && !Input.GetKeyDown(KeyCode.Z))
+			if (_qteGen == 1)
 			{
-				if (Input.GetButtonDown ("TKey"))
+				if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.D) && !Input.GetKeyDown(KeyCode.A) && !Input.GetKeyDown(KeyCode.S) && !Input.GetKeyDown(KeyCode.W))
 				{
-					CorrectKey = 1;
-					StartCoroutine (KeyPressing ());
-				}
-				else
-				{
-					CorrectKey = 2;
-					StartCoroutine (KeyPressing ());
+					if (Input.GetButtonDown ("AKey"))
+					{
+						_correctKey = 1;
+						StartCoroutine (KeyPressing ());
+					}
+					else
+					{
+						_correctKey = 2;
+						StartCoroutine (KeyPressing ());
+					}
 				}
 			}
-		}
-		if (QTEGen == 3)
-		{
-			if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.D) && !Input.GetKeyDown(KeyCode.Q) && !Input.GetKeyDown(KeyCode.S) && !Input.GetKeyDown(KeyCode.Z))
+			if (_qteGen == 2)
 			{
-				if (Input.GetButtonDown ("EKey"))
+				if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.D) && !Input.GetKeyDown(KeyCode.A) && !Input.GetKeyDown(KeyCode.S) && !Input.GetKeyDown(KeyCode.W))
 				{
-					CorrectKey = 1;
-					StartCoroutine (KeyPressing ());
+					if (Input.GetButtonDown ("TKey"))
+					{
+						_correctKey = 1;
+						StartCoroutine (KeyPressing ());
+					}
+					else
+					{
+						_correctKey = 2;
+						StartCoroutine (KeyPressing ());
+					}
 				}
-				else
+			}
+			if (_qteGen == 3)
+			{
+				if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.D) && !Input.GetKeyDown(KeyCode.A) && !Input.GetKeyDown(KeyCode.S) && !Input.GetKeyDown(KeyCode.W))
 				{
-					CorrectKey = 2;
-					StartCoroutine (KeyPressing ());
+					if (Input.GetButtonDown ("EKey"))
+					{
+						_correctKey = 1;
+						StartCoroutine (KeyPressing ());
+					}
+					else
+					{
+						_correctKey = 2;
+						StartCoroutine (KeyPressing ());
+					}
 				}
 			}
 		}
 	}
 	IEnumerator KeyPressing()
 	{
-		QTEGen = 4;
-		if (CorrectKey == 1 && ForceExit == 0)
+		_qteGen = 4;
+		if (_correctKey == 1 && !_forceExit)
 		{
-			CountingDown = 2;
-			PassBox.GetComponent<Text> ().text = "PASS!";
-			yield return new WaitForSeconds (Time);
-			CorrectKey = 0;
-			PassBox.GetComponent<Text> ().text = "";
-			DisplayBox.GetComponent<Text> ().text = "";
-			yield return new WaitForSeconds (Time);
-			WaitingForKey = 0;
+			_countingDown = 2;
+			_msgBox.text = "PASS!";
+			_keyCounter++;
+			yield return new WaitForSeconds (_time);
+			_correctKey = 0;
+			_msgBox.text = "";
+			_letterBox.text = "";
+			yield return new WaitForSeconds (_time);
+			_waitingForKey = false;
 		}
-		if (CorrectKey == 2 && ForceExit == 0)
+		if (_correctKey == 2 && !_forceExit)
 		{
-			CountingDown = 2;
-			PassBox.GetComponent<Text> ().text = "FAIL!!!!!!!";
-			yield return new WaitForSeconds (Time);
-			CorrectKey = 0;
-			PassBox.GetComponent<Text> ().text = "";
-			DisplayBox.GetComponent<Text> ().text = "";
-			yield return new WaitForSeconds (Time);
-			WaitingForKey = 0;
-			CountingDown = 1;
+			_countingDown = 2;
+			_msgBox.text = "FAIL!!!!!!!";
+			yield return new WaitForSeconds (_time);
+			_correctKey = 0;
+			_msgBox.text = "";
+			_letterBox.text = "";
+			yield return new WaitForSeconds (_time);
+			_waitingForKey = false;
+			_countingDown = 1;
+			_keyCounter = 0;
+			StartCoroutine(Cooldown());
 		}
 	}
 
 	IEnumerator CountDown()
 	{
-		if (ForceExit == 0)
-			yield return new WaitForSeconds(Time * 2);
-		if (CountingDown == 1 && ForceExit == 0)
+		if (!_forceExit)
+			yield return new WaitForSeconds(_time * 2);
+		if (_countingDown == 1 && !_forceExit)
 		{
-			QTEGen = 4;
-			CountingDown = 2;
-			PassBox.GetComponent<Text> ().text = "FAIL!!!!!!!";
-			yield return new WaitForSeconds (Time);
-			CorrectKey = 0;
-			PassBox.GetComponent<Text> ().text = "";
-			DisplayBox.GetComponent<Text> ().text = "";
-			yield return new WaitForSeconds (Time);
-			WaitingForKey = 0;
-			CountingDown = 1;
+			_qteGen = 4;
+			_countingDown = 2;
+			_msgBox.text = "FAIL!!!!!!!";
+			yield return new WaitForSeconds (_time);
+			_correctKey = 0;
+			_msgBox.text = "";
+			_letterBox.text = "";
+			yield return new WaitForSeconds (_time);
+			_waitingForKey = false;
+			_countingDown = 1;
+			_keyCounter = 0;
+			StartCoroutine(Cooldown());
 		}
 	}
 }

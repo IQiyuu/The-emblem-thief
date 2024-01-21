@@ -3,7 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static bool gameIsPaused = false;
+    [SerializeField] AudioSource _musicPlayer;
+
+    public bool gameIsPaused = false;
 
     public GameObject pauseMenuUI;
 
@@ -29,6 +31,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0;
         gameIsPaused = true;
+        _musicPlayer.Pause();
     }
 
     public void Resume()
@@ -36,6 +39,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1;
         gameIsPaused = false;
+        _musicPlayer.Play();
     }
 
     public void SettingsButton()
@@ -51,6 +55,7 @@ public class PauseMenu : MonoBehaviour
     public void LoadMainMenu() 
     {
         Resume();
+        _musicPlayer.Stop();
         SceneManager.LoadScene("MainMenu");
     }
 
