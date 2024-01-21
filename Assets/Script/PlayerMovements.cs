@@ -4,12 +4,16 @@ public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed;
 
+    [SerializeField] Animator _animator;
+
     private Vector3 velocity = Vector3.zero;
     void FixedUpdate()
     {
         float horizontalMovement = Input.GetAxis("Horizontal");
         float verticalMovement = Input.GetAxis("Vertical") ;
         MovePlayer(horizontalMovement, verticalMovement);
+        print(Mathf.Abs(horizontalMovement + verticalMovement));
+        _animator.SetFloat("Speed", Mathf.Abs(horizontalMovement) + Mathf.Abs(verticalMovement));
     }
 
     void MovePlayer(float horizontalMovement, float verticalMovement)

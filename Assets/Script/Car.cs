@@ -8,17 +8,19 @@ public class Car : MonoBehaviour
     [SerializeField] private int _timeToSteal;
     [SerializeField] private bool _randomCar;
     [SerializeField] private bool _policeCar;
+    [SerializeField] Animator     _animator;
     private bool _stole = false;
 
     [SerializeField] Sprite _brokenSprite;
 
     void Start() {
         if (_randomCar)
-            _value = Random.Range(0,500);
+            _value = Random.Range(0,50);
     }
 
     public void setStole() { 
         _stole = true;
+        _animator.enabled = false;
         gameObject.GetComponent<SpriteRenderer>().sprite = _brokenSprite;
     }
     public bool getStole() { return _stole; }

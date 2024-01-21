@@ -98,11 +98,11 @@ MonoBehaviour:
   _letterBox: {fileID: 0}
   _msgBox: {fileID: 0}
   _player: {fileID: -1371738989627617732, guid: 039ceaf85adb5c6359f0c03376e930ee, type: 3}
-  _time: 2
+  _time: 3
   _soundSource: {fileID: 3559746745387184711}
   _inProgressSound: {fileID: 8300000, guid: dd7bbf6c0ac41564c9b9b68b68379f9e, type: 3}
-  _failSound: {fileID: 0}
-  _successSound: {fileID: 0}
+  _failSound: {fileID: 8300000, guid: 3f034999e16226e4488f1b00bdffc8f0, type: 3}
+  _successSound: {fileID: 8300000, guid: 047c8bcb54c81dc4bb2f22eb41490a59, type: 3}
 --- !u!82 &3559746745387184711
 AudioSource:
   m_ObjectHideFlags: 0
@@ -212,6 +212,7 @@ GameObject:
   - component: {fileID: 3961703240597750225}
   - component: {fileID: 8613270565221079752}
   - component: {fileID: 8093013467113979425}
+  - component: {fileID: 7824013373219162949}
   m_Layer: 7
   m_Name: CommonCar
   m_TagString: Car
@@ -348,6 +349,7 @@ MonoBehaviour:
   _timeToSteal: 3
   _randomCar: 0
   _policeCar: 0
+  _animator: {fileID: 7824013373219162949}
   _brokenSprite: {fileID: 21300000, guid: e981a5fb87895204d8d034a45e82a146, type: 3}
 --- !u!61 &8093013467113979425
 BoxCollider2D:
@@ -394,3 +396,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.865202, y: 3.921785}
   m_EdgeRadius: 0
+--- !u!95 &7824013373219162949
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7791152852898835819}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 042bb8cfa6ff78b4ca3b0e6503ddd168, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

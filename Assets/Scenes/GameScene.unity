@@ -848,8 +848,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 298733084}
     - target: {fileID: 1554093239433875500, guid: e980570ee4c6df5459b0a9a6a28a763a, type: 3}
+      propertyPath: _arroundPath
+      value: 
+      objectReference: {fileID: -3416642204482554613, guid: a6402fba5562698469cfc22cb6dc2e12, type: 3}
+    - target: {fileID: 1554093239433875500, guid: e980570ee4c6df5459b0a9a6a28a763a, type: 3}
       propertyPath: _ennemyNumber
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1554093239433875500, guid: e980570ee4c6df5459b0a9a6a28a763a, type: 3}
       propertyPath: _ennemyPrefab

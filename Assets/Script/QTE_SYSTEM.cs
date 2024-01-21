@@ -91,6 +91,9 @@ public class QTE_SYSTEM : MonoBehaviour
 					_player.addAmount(_actualCar.getValue());
 				_actualCar.setStole();
 				_soundSource.Stop();
+				_soundSource.clip = _successSound;
+				_soundSource.loop = false;
+				_soundSource.Play();
 				//Destroy(gameObject);
 			}
 			if (!_waitingForKey && !_forceExit && _cooldown == 0 
@@ -184,6 +187,9 @@ public class QTE_SYSTEM : MonoBehaviour
 		{
 			_countingDown = 2;
 			_msgBox.text = "FAIL!!!!!!!";
+			_soundSource.clip = _failSound;
+			_soundSource.loop = false;
+			_soundSource.Play();
 			yield return new WaitForSeconds (_time);
 			_correctKey = 0;
 			_msgBox.text = "";
@@ -205,6 +211,9 @@ public class QTE_SYSTEM : MonoBehaviour
 			_qteGen = 4;
 			_countingDown = 2;
 			_msgBox.text = "FAIL!!!!!!!";
+			_soundSource.clip = _failSound;
+			_soundSource.loop = false;
+			_soundSource.Play();
 			yield return new WaitForSeconds (_time);
 			_correctKey = 0;
 			_msgBox.text = "";

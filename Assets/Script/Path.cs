@@ -17,4 +17,5 @@ public class Path : MonoBehaviour
     public Transform getNextWaypoint(int i) {
         return waypoints[i];
     }
+
 }

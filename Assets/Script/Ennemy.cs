@@ -10,13 +10,14 @@ public class Ennemy : MonoBehaviour
     [SerializeField] AudioSource    _walkSource;
     [SerializeField] AudioClip      _runSound;
     [SerializeField] Transform      _player;
-    [SerializeField] LayerMask    _layer;
-    private Path _pathing;
-    private Transform _nextStep;
-    private int _index = 0;
+    [SerializeField] LayerMask      _layer;
+    [SerializeField] Animator       _animator;
+    public Path _pathing;
+    public Transform _nextStep;
+    public int _index = 0;
     private bool _aggro = false;
-    private bool _arroundEnnemy = false;
-    private bool _scale = true;
+    public bool _scale = true;
+    public bool _arroundEnnemy = false;
     
 
     // Start is called before the first frame update
@@ -39,22 +40,29 @@ public class Ennemy : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 720f * Time.deltaTime);
 
         if (Vector3.Distance(transform.position, _nextStep.position) < 0.3f) {
-            if (_index > 0 && _scale) {
-                _index--;
-                if (_index == 0)
-                    _scale = !_scale;
-            }
-            else {
+            if (_arroundEnnemy) {
                 _index++;
-                if (_index == _pathing.getPathLength())
-                    _scale = !_scale;
+                if (_index > 3)
+                    _index = 0;
+            }
+            else if (!_arroundEnnemy){
+                if (_index > 0 && _scale) {
+                    _index--;
+                    if (_index == 0)
+                        _scale = !_scale;
+                }
+                else {
+                    _index++;
+                    if (_index == _pathing.getPathLength() - 1)
+                        _scale = !_scale;
+                } 
             }
             _nextStep = _pathing.getNextWaypoint(_index);
         }
     }
 
     IEnumerator increaseSpeed() {
-        _speed = 5;
+        _speed = 3;
         while (true) {
             _speed++;
             yield return new WaitForSeconds(30);
@@ -75,7 +83,8 @@ public class Ennemy : MonoBehaviour
                 _aggroSource.Play();
                 _walkSource.clip = _runSound;
                 _walkSource.Play();
-            }
+                _animator.SetBool("trigger", true);
+                }
         }
     }
 

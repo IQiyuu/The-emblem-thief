@@ -321,6 +321,7 @@ GameObject:
   - component: {fileID: 8042947259531465218}
   - component: {fileID: 3878060508008280898}
   - component: {fileID: 1258266711685871440}
+  - component: {fileID: 6848817784560482432}
   m_Layer: 2
   m_Name: Guard
   m_TagString: Guard
@@ -363,9 +364,15 @@ MonoBehaviour:
   _walkSource: {fileID: 8605147757786160566}
   _runSound: {fileID: 8300000, guid: 7948bf4e92ec5744aad432714ebd9b28, type: 3}
   _player: {fileID: 0}
-  layer:
+  _layer:
     serializedVersion: 2
     m_Bits: 0
+  _animator: {fileID: 6848817784560482432}
+  _pathing: {fileID: 0}
+  _nextStep: {fileID: 0}
+  _index: 0
+  _scale: 1
+  _arroundEnnemy: 0
 --- !u!212 &2895223393979546761
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -552,3 +559,24 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!95 &6848817784560482432
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7927731448425100891}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a1948859f8632e145b26e066649389be, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

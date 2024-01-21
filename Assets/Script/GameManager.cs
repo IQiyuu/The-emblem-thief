@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] Path       _arroundPath;
     [SerializeField] GameObject _parkingPrefab;
     [SerializeField] GameObject _playerPrefab;
     [SerializeField] GameObject _ennemyPrefab;
@@ -23,6 +24,32 @@ public class GameManager : MonoBehaviour
         _mCamera.transform.position = new Vector3(20.5f, 5, -10);
         for (int i = 0; i < _ennemyNumber; i++)
             Instantiate(_ennemyPrefab);
+        GameObject tmpEnnemy = Instantiate(_ennemyPrefab);
+        int r = Random.Range(0,4);
+        int r2;
+        r2 = r;
+        tmpEnnemy.GetComponent<Ennemy>()._index = r;
+        tmpEnnemy.GetComponent<Ennemy>()._pathing = _arroundPath;
+        tmpEnnemy.GetComponent<Ennemy>()._arroundEnnemy = true;
+        tmpEnnemy.transform.position = _arroundPath.getNextWaypoint(r).position;
+        if (r < 3)
+            r++;
+        else
+            r = 0;
+        tmpEnnemy.GetComponent<Ennemy>()._nextStep = _arroundPath.getNextWaypoint(r);
+        r = Random.Range(0,4);
+        tmpEnnemy = Instantiate(_ennemyPrefab);
+        tmpEnnemy.GetComponent<Ennemy>()._pathing = _arroundPath;
+        while (r == r2)
+            r = Random.Range(0,4);
+        tmpEnnemy.GetComponent<Ennemy>()._index = r;
+        tmpEnnemy.GetComponent<Ennemy>()._arroundEnnemy = true;
+        tmpEnnemy.transform.position = _arroundPath.getNextWaypoint(r).position;
+        if (r < 3)
+            r++;
+        else
+            r = 0;
+        tmpEnnemy.GetComponent<Ennemy>()._nextStep = _arroundPath.getNextWaypoint(r);
     }
 
     // Update is called once per frame
