@@ -6,18 +6,16 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] Path       _arroundPath;
     [SerializeField] GameObject _parkingPrefab;
-    [SerializeField] GameObject _playerPrefab;
+    [SerializeField] GameObject _player;
     [SerializeField] GameObject _ennemyPrefab;
     [SerializeField] int        _ennemyNumber;
     private Camera              _mCamera;
-    private GameObject          _player;
     private GameObject          _parking;
     
 
     // Start is called before the first frame update
     void Start()
     {
-        _player = Instantiate(_playerPrefab);
         _player.transform.position = new Vector3(20.5f, 5, 0);
         _parking = Instantiate(_parkingPrefab);
         _mCamera = Camera.main;

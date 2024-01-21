@@ -10,6 +10,8 @@ TagManager:
   - PlayerUI
   - Guard
   - SFX
+  - Exit
+  - Endenu
   layers:
   - Default
   - TransparentFX
