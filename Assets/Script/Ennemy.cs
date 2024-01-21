@@ -11,20 +11,17 @@ public class Ennemy : MonoBehaviour
     [SerializeField] AudioClip      _runSound;
     [SerializeField] Transform      _player;
     [SerializeField] LayerMask    _layer;
-
-    UnityEngine.AI.NavMeshAgent _agent;
-
     private Path _pathing;
     private Transform _nextStep;
     private int _index = 0;
     private bool _aggro = false;
+    private bool _arroundEnnemy = false;
+    private bool _scale = true;
     
 
     // Start is called before the first frame update
     void Awake()
     {
-        _agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        _agent.updateRotation = false;
         _pathing = _pathManager.getRandomPath();
         transform.position = _pathing.getFirstWaypoint().position;
         _index = (_index + 1) % _pathing.getPathLength();
@@ -34,24 +31,30 @@ public class Ennemy : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     { 
-        if (!_aggro) {
-            _player = GameObject.FindGameObjectsWithTag("Player")[0].gameObject.transform;
-            Vector3 dir = _nextStep.position - transform.position;
-            transform.Translate(dir.normalized * _speed * Time.deltaTime, Space.World);
+        _player = GameObject.FindGameObjectsWithTag("Player")[0].gameObject.transform;
+        Vector3 dir = _aggro ? _player.position - transform.position : _nextStep.position - transform.position;
+        transform.Translate(dir.normalized * _speed * Time.deltaTime, Space.World);
 
-            Quaternion toRotation = Quaternion.LookRotation(Vector3.forward, dir);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 720f * Time.deltaTime);
+        Quaternion toRotation = Quaternion.LookRotation(Vector3.forward, dir);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 720f * Time.deltaTime);
 
-            if (Vector3.Distance(transform.position, _nextStep.position) < 0.3f) {
-                _index = (_index + 1) % _pathing.getPathLength();
-                _nextStep = _pathing.getNextWaypoint(_index);
+        if (Vector3.Distance(transform.position, _nextStep.position) < 0.3f) {
+            if (_index > 0 && _scale) {
+                _index--;
+                if (_index == 0)
+                    _scale = !_scale;
             }
+            else {
+                _index++;
+                if (_index == _pathing.getPathLength())
+                    _scale = !_scale;
+            }
+            _nextStep = _pathing.getNextWaypoint(_index);
         }
-        else
-            _agent.SetDestination(_player.position);
     }
 
     IEnumerator increaseSpeed() {
+        _speed = 5;
         while (true) {
             _speed++;
             yield return new WaitForSeconds(30);
